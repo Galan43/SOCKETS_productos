@@ -17,12 +17,30 @@ function socket(io) {
         // Guardar Usuario
         socket.on("clienteGuardarUsuario", async (usuario) => {
             try {
+                if(usuario.id == ""){
                 await new Usuario(usuario).save();
                 io.emit("servidorUsuarioGuardado", "Usuario guardado");
-                console.log("Usuario guardado");
+                } else {
+                    await Usuario.findByIdAndUpdate(usuario.id,usuario.usuario,);
+                    io.emit("servidorUsuarioGuardado", "Usuario modificado");
+                }
+                mostrarUsuarios();
             } catch (error) {
                 console.log(error);
             }
+        });
+
+         //OBTENER USUARIO POR ID
+         socket.on("clienteObtenerUsuarioPorID",async(id)=>{
+            const usuario=await Usuario.findById(id);
+            io.emit("servidorObtenerUsuarioPorID",usuario);
+        });
+
+        //BORRAR USUARIO POR ID
+        socket.on("clienteBorrarUsuario",async(id)=>{
+            await Usuario.findByIdAndDelete(id);
+            io.emit("servidorUsuarioGuardado","Usuario borrado");
+            mostrarUsuarios();
         });
 
         // Mostrar Productos
@@ -46,6 +64,20 @@ function socket(io) {
                 console.log(error);
             }
         });
+
+         //OBTENER USUARIO POR ID DE PRODUCTOS
+         socket.on("clienteObtenerProductoPorID",async(id)=>{
+            const producto=await Producto.findById(id);
+            io.emit("servidorObtenerProductoPorID",producto);
+        });
+
+        //BORRAR USUARIO POR ID DE PRODUCTOS
+        socket.on("clienteBorrarProducto",async(id)=>{
+            await Producto.findByIdAndDelete(id);
+            io.emit("servidorProductoGuardado","Producto borrado");
+            mostrarProductos();
+        });
+
     });
 }
 

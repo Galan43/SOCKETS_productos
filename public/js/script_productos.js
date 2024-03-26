@@ -32,6 +32,7 @@ var enviarDatosPro = document.getElementById("enviarDatosPro");
 enviarDatosPro.addEventListener("submit", (e) => {
     e.preventDefault();
     var producto = {
+        id: document.getElementById("id").value,
         nombre: document.getElementById("nombre").value,
         precio: document.getElementById("precio").value,
         cantidad: document.getElementById("cantidad").value
@@ -52,13 +53,21 @@ enviarDatosPro.addEventListener("submit", (e) => {
 });
 
 
-
-//Modificar Producto
-function editarProducto(id) {
+function editarProducto(id){
     console.log(id);
+    socket.emit("clienteObtenerProductoPorID",id);
 }
-
-//Borrar Producto
-function borrarProducto(id) {
+socket.on("servidorObtenerProductoPorID",(producto)=>{
+    console.log(producto);
+    document.getElementById("id").value=producto._id;
+    document.getElementById("nombre").value=producto.nombre;
+    document.getElementById("precio").value=producto.precio;
+    document.getElementById("cantidad").value=producto.cantidad;
+    document.getElementById("txtNuevoProducto").innerHTML="Editar producto";
+    document.getElementById("txtGuardarProducto").innerHTML="Guardar cambios";
+});
+// ELIMINAR UN REGISTRO DE MONGODB
+function borrarProducto(id){
     console.log(id);
+    socket.emit("clienteBorrarProducto", id);
 }
