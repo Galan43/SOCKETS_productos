@@ -53,18 +53,20 @@ enviarDatos.addEventListener("submit", (e)=>{
     });
 
 // MODIFICAR UN REGISTRO DE MONGODB
-function editarUsuario(id){
+function editarUsuario(id) {
     console.log(id);
-    socket.emit("clienteObtenerUsuarioPorID",id);
+    socket.emit("clienteObtenerUsuarioPorID", id);
 }
-socket.on("servidorObtenerUsuarioPorID",(usuario)=>{
+
+socket.on("servidorObtenerUsuarioPorID", (usuario) => {
     console.log(usuario);
-    document.getElementById("id").value=usuario._id;
-    document.getElementById("nombre").value=usuario.nombre;
-    document.getElementById("usuario").value=usuario.usuario;
-    document.getElementById("password").value=usuario.password;
-    document.getElementById("txtNuevoUsuario").innerHTML="Editar usuario";
-    document.getElementById("txtGuardarUsuario").innerHTML="Guardar cambios";
+    document.getElementById("id").value = usuario._id;
+    document.getElementById("nombre").value = usuario.nombre;
+    document.getElementById("usuario").value = usuario.usuario;
+    document.getElementById("password").value = usuario.password;
+    document.getElementById("id").setAttribute("data-usuario-id", usuario._id);
+    document.getElementById("txtNuevoUsuario").innerHTML = "Editar usuario";
+    document.getElementById("txtGuardarUsuario").innerHTML = "Guardar cambios";
 });
 // ELIMINAR UN REGISTRO DE MONGODB
 function borrarUsuario(id){

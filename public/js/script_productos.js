@@ -52,20 +52,23 @@ enviarDatosPro.addEventListener("submit", (e) => {
     document.getElementById("nombre").focus();
 });
 
-
-function editarProducto(id){
+// editar productos
+function editarProducto(id) {
     console.log(id);
-    socket.emit("clienteObtenerProductoPorID",id);
+    socket.emit("clienteObtenerProductoPorID", id);
 }
-socket.on("servidorObtenerProductoPorID",(producto)=>{
+
+socket.on("servidorObtenerProductoPorID", (producto) => {
     console.log(producto);
-    document.getElementById("id").value=producto._id;
-    document.getElementById("nombre").value=producto.nombre;
-    document.getElementById("precio").value=producto.precio;
-    document.getElementById("cantidad").value=producto.cantidad;
-    document.getElementById("txtNuevoProducto").innerHTML="Editar producto";
-    document.getElementById("txtGuardarProducto").innerHTML="Guardar cambios";
+    document.getElementById("id").value = producto._id;
+    document.getElementById("nombre").value = producto.nombre;
+    document.getElementById("precio").value = producto.precio;
+    document.getElementById("cantidad").value = producto.cantidad;
+    document.getElementById("id").setAttribute("data-producto-id", producto._id); 
+    document.getElementById("txtNuevoProducto").innerHTML = "Editar producto";
+    document.getElementById("txtGuardarProducto").innerHTML = "Guardar cambios";
 });
+
 // ELIMINAR UN REGISTRO DE MONGODB
 function borrarProducto(id){
     console.log(id);

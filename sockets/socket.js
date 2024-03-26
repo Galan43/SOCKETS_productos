@@ -17,12 +17,12 @@ function socket(io) {
         // Guardar Usuario
         socket.on("clienteGuardarUsuario", async (usuario) => {
             try {
-                if(usuario.id == ""){
-                await new Usuario(usuario).save();
-                io.emit("servidorUsuarioGuardado", "Usuario guardado");
+                if (usuario.id && usuario.id !== "") {
+                    await Usuario.findByIdAndUpdate(usuario.id, usuario);
+                    io.emit("servidorUsuarioGuardado", "Usuario actualizado");
                 } else {
-                    await Usuario.findByIdAndUpdate(usuario.id,usuario.usuario,);
-                    io.emit("servidorUsuarioGuardado", "Usuario modificado");
+                    await new Usuario(usuario).save();
+                    io.emit("servidorUsuarioGuardado", "Usuario guardado");
                 }
                 mostrarUsuarios();
             } catch (error) {
@@ -57,21 +57,28 @@ function socket(io) {
         // Guardar Productos
         socket.on("clienteGuardarPro", async (producto) => {
             try {
-                await new Producto(producto).save();
-                io.emit("servidorProductoGuardado", "Producto guardado");
-                console.log("Producto guardado");
+                if (producto.id && producto.id !== "") {
+                    await Producto.findByIdAndUpdate(producto.id, producto);
+                    io.emit("servidorProductoGuardado", "Producto actualizado");
+                    console.log("Producto actualizado");
+                } else {
+                    await new Producto(producto).save();
+                    io.emit("servidorProductoGuardado", "Producto guardado");
+                    console.log("Producto guardado");
+                }
+                mostrarProductos();
             } catch (error) {
                 console.log(error);
             }
         });
 
-         //OBTENER USUARIO POR ID DE PRODUCTOS
-         socket.on("clienteObtenerProductoPorID",async(id)=>{
-            const producto=await Producto.findById(id);
-            io.emit("servidorObtenerProductoPorID",producto);
+         //OBTENER Productos POR ID DE 
+         socket.on("clienteObtenerProductoPorID", async (id) => {
+            const producto = await Producto.findById(id);
+            io.emit("servidorObtenerProductoPorID", producto);
         });
 
-        //BORRAR USUARIO POR ID DE PRODUCTOS
+        //BORRAR Productos POR ID DE 
         socket.on("clienteBorrarProducto",async(id)=>{
             await Producto.findByIdAndDelete(id);
             io.emit("servidorProductoGuardado","Producto borrado");
